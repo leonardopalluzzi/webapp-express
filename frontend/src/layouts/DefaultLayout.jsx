@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom'
-import Header from '../components/smart/Header'
-import Footer from '../components/smart/Footer'
+import HeaderUi from '../components/dumb/Header.ui.jsx'
+import Footer from '../components/dumb/Footer.ui.jsx'
 
 export default function DefaultLayout() {
     return (
         <>
-            <Header />
+            <HeaderUi />
             <Outlet />
             <Footer />
 

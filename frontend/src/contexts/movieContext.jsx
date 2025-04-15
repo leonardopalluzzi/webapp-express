@@ -11,8 +11,6 @@ function MovieProvider({ children }) {
         state: 'loading'
     })
 
-
-
     useEffect(() => {
         fetch(indexEndpoint)
             .then(res => res.json())
@@ -38,7 +36,7 @@ function MovieProvider({ children }) {
     //return
     return (
         <>
-            <MovieContext.Provider values={{ movies }}>
+            <MovieContext.Provider value={{ movies }}>
                 {children}
             </MovieContext.Provider>
         </>

@@ -1,9 +1,13 @@
-export default function Home() {
+import Jumbo from "../components/smart/Jumbo"
 
-    movies
+export default function Home() {
 
     return (
         <>
+            <Jumbo />
+            <main>
+
+            </main>
 
         </>
     )
