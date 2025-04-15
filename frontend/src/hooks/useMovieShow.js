@@ -6,7 +6,7 @@ export default function useMovieShow({ id }) {
         state: 'loading'
     })
 
-    const [movieId, setMovieId] = useState(1)
+    const [movieId, setMovieId] = useState(id)
 
     const showEndpoint = `http://localhost:3000/api/v1/movies/${movieId}`
 
@@ -29,6 +29,8 @@ export default function useMovieShow({ id }) {
                 })
             })
     }, [movieId])
+    console.log(id);
+
 
     return { singleMovie, setMovieId }
 
