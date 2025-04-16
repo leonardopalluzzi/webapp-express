@@ -1,4 +1,6 @@
 const connection = require('../db/db')
+const secret = process.env.SECRET_KEY;
+const jwt = require('jsonwebtoken');
 
 function index(req, res) {
 
@@ -25,13 +27,10 @@ function show(req, res) {
 
 function store(req, res) {
     const newComment = req.body
-    console.log(newComment);
+    //console.log(newComment);
+    newComment.name = req.user.username
 
-
-    //movie di
-    //username
-    //rating
-    //text
+    //console.log(newComment);
 
     const sql = 'INSERT INTO reviews (movie_id, name, vote, text) VALUES (?, ?, ?, ?);'
     const values = [newComment.movieId, newComment.name, newComment.vote, newComment.text]

@@ -24,7 +24,7 @@ function show(req, res) {
 
         connection.query(sqlReviews, [movie.id], (err, reviewsResults) => {
             if (err) return res.status(500).json({ status: 'DB error', message: err.message });
-            console.log(reviewsResults);
+            //console.log(reviewsResults);
 
             const review = reviewsResults.map(item => {
                 const { id, name, vote, text } = item
