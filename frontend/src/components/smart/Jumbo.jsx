@@ -1,20 +1,12 @@
 import JumboUi from "../dumb/Jumbo.ui.jsx";
-import useMovieShow from "../../hooks/useMovieShow.js";
+import Comments from "./Comments.jsx";
+import CarouselUi from "../dumb/Carousel.ui.jsx";
 import { useMovieContext } from '../../contexts/movieContext.jsx';
 
 export default function Jumbo() {
 
-    //rivedere collegamento con id nel custom hook
-    let id = 1
-    const { singleMovie, setMovieId } = useMovieShow({ id });
-    console.log(singleMovie);
 
-    // fare componente review che scorre le revciew per ogni film
-
-    //usare rotta index per mostrare i film nel jumbo
     const { movies } = useMovieContext()
-
-    //recupoerare i commenti nel relativo componente con la rotta show
 
 
     switch (movies.state) {
@@ -35,13 +27,20 @@ export default function Jumbo() {
             //fare map, creare commenti container, pasare id dal map e chiamare hook per fetch show
             return (
                 <>
-                    <JumboUi
-                        comments={<Commenti id={item.id />}
-                            image={movies.movies.image}
-                            title={movies.movies.title}
-                            content={movies.movies.abstract}
-                        />
+                    {
+                        movies.movies.map(item => (
+                            <JumboUi
+                                comments={<Comments id={item.id} />}
+                                key={item.id}
+                                image={item.image}
+                                title={item.title}
+                                content={item.abstract}
+                            />
+                        ))
+                    }
                 </>
+
+
             )
     }
 }

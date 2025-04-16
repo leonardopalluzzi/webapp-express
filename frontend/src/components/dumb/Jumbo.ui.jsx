@@ -1,4 +1,4 @@
-export default function JumboUi({ image, title, content }) {
+export default function JumboUi({ image, title, content, comments }) {
     return (
         <>
             <div className="container">
@@ -9,6 +9,7 @@ export default function JumboUi({ image, title, content }) {
                     <div className="col">
                         <h2>{title}</h2>
                         <span>{content}</span>
+                        <div>{comments}</div>
                     </div>
                 </div>
             </div>
