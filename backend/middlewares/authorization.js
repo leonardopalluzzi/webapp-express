@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 
 
 function authToken(req, res, next) {
-    const authHeader = req.header['authorization'];
+    const authHeader = req.headers['authorization'];
+
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) return res.status(401).json({ status: 'Not Authorized', message: 'User not logged' });
