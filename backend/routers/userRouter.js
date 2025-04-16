@@ -8,6 +8,8 @@ router.get('/:id', userController.show)
 
 router.post('/', userController.store)
 
+router.post('/', userController.login)
+
 router.put('/:id', userController.update)
 
 router.patch('/:id', userController.modify)

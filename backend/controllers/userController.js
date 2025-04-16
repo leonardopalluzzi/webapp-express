@@ -1,5 +1,7 @@
 const connection = require('../db/db')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken');
+const secret = process.env.SECRET_KEY
 
 function index(req, res) {
 
@@ -13,15 +15,7 @@ function index(req, res) {
 
 function show(req, res) {
 
-    const id = Number(req.params.id)
 
-    const sql = 'SELECT * FROM reviews WHERE movies.id = ?'
-
-    connection.query(sql, [id], (err, results) => {
-        if (err) return res.status(500).json({ status: 'DB error', message: err.message });
-        if (results.length == 0) return res.status(404).json({ status: 'Not Found', message: 'Movie Not Found' });
-        res.json(results)
-    })
 }
 
 function store(req, res) {
@@ -38,6 +32,38 @@ function store(req, res) {
             res.json(`Utente registrato con successo: ${results}`)
         });
     })
+}
+
+function login(req, res) {
+    //recupero user e pass
+    const { username, password } = req.body;
+
+    //verifico l'esistenza dello user
+    const sql = 'SELECT * FROM users WHERE users.username = ?';
+    const values = username;
+    connection.query(sql, [values], (err, results) => {
+        if (err) return res.status(500).json({ status: 'DB Error', message: err.message });
+        if (results.length == 0) return res.status(403).json({ status: 'Forbidden', message: 'User not found' });
+        const user = results[0]
+        //se esiste decripto e confronto
+        bcrypt.compare(password, user.password, (err, isMatch) => {
+            if (err) return res.status(500).json({ status: 'DB Error', message: err.message });
+            if (!isMatch) return res.status(401).json({ status: 'Forbidden', message: 'Incorrect password' });
+
+            //se il confornto ha successo genero il token e lo restituisco con la res
+            const token = jwt.sign(
+                { id: user.id, username: user.password },
+                secret,
+                { expiresIn: '1h' }
+            )
+
+            res.json({ status: 'success', message: 'Login successfull', token })
+        })
+
+    })
+
+
+
 }
 
 function update(req, res) {
@@ -58,5 +84,6 @@ module.exports = {
     store,
     update,
     modify,
-    destroy
+    destroy,
+    login
 }

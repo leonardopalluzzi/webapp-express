@@ -1,12 +1,13 @@
 const express = require('express')
 const router = express.Router()
 const commentsController = require('../controllers/commentsController')
+const authorization = require('../middlewares/authorization')
 
 router.get('/', commentsController.index)
 
 router.get('/:id', commentsController.show)
 
-router.post('/', commentsController.store)
+router.post('/', authorization, commentsController.store)
 
 router.put('/:id', commentsController.update)
 
