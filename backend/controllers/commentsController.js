@@ -14,32 +14,12 @@ function show(req, res) {
 
     const id = Number(req.params.id)
 
-    const sql = 'SELECT * FROM movies WHERE movies.id = ?'
-    const sqlReviews = 'SELECT * FROM reviews WHERE movie_id = ?'
+    const sql = 'SELECT * FROM reviews WHERE movies.id = ?'
 
     connection.query(sql, [id], (err, results) => {
         if (err) return res.status(500).json({ status: 'DB error', message: err.message });
         if (results.length == 0) return res.status(404).json({ status: 'Not Found', message: 'Movie Not Found' });
-        const movie = results[0]
-
-        connection.query(sqlReviews, [movie.id], (err, reviewsResults) => {
-            if (err) return res.status(500).json({ status: 'DB error', message: err.message });
-            console.log(reviewsResults);
-
-            const review = reviewsResults.map(item => {
-                const { id, name, vote, text } = item
-                const rev = {
-                    id,
-                    name,
-                    vote,
-                    text
-                }
-                return rev
-            })
-
-            movie.reviews = review
-            res.json(movie)
-        })
+        res.json(results)
     })
 }
 
