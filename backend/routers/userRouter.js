@@ -6,9 +6,9 @@ router.get('/', userController.index)
 
 router.get('/:id', userController.show)
 
-router.post('/', userController.store)
+router.post('/register', userController.store)
 
-router.post('/', userController.login)
+router.post('/login', userController.login)
 
 router.put('/:id', userController.update)
 
