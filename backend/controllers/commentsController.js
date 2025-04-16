@@ -44,6 +44,26 @@ function show(req, res) {
 }
 
 function store(req, res) {
+    const newComment = req.body
+    console.log(newComment);
+
+
+    //movie di
+    //username
+    //rating
+    //text
+
+    const sql = 'INSERT INTO reviews (movie_id, name, vote, text) VALUES (?, ?, ?, ?);'
+    const values = [newComment.movieId, newComment.name, newComment.vote, newComment.text]
+
+    if (!newComment) res.status(400).json({ message: 'Empty comment' });
+
+    connection.query(sql, values, (err, results) => {
+        if (err) return res.status(500).json({ status: 'DB error', message: err.message });
+
+
+        res.json({ state: 'success', message: 'Comment posted successfully' })
+    })
 
 }
 
