@@ -21,18 +21,18 @@ function show(req, res) {
 function store(req, res) {
     const newUser = req.body;
 
-    if (!newUser.username) return res.status(403).json({ state: 'Forbidden', message: 'Username not valid' });
-    if (!newUser.password) return res.status(403).json({ state: 'Forbidden', message: 'Password not valid' })
+    if (!newUser.username) return res.status(403).json({ state: 'forbidden', message: 'Username not valid' });
+    if (!newUser.password) return res.status(403).json({ state: 'forbidden', message: 'Password not valid' })
 
     bcrypt.hash(newUser.password, 10, (err, hashedPass) => {
-        if (err) return res.status(500).json({ status: 'DB error', message: err.message });
+        if (err) return res.status(500).json({ status: 'error', message: err.message });
 
         const sql = 'INSERT INTO users (username, password) VALUES (?, ?)'
         const values = [newUser.username, hashedPass]
 
         connection.query(sql, values, (err, results) => {
             if (err) return res.status(500).json({ status: 'DB error', message: err.message });
-            res.json(`Utente registrato con successo: ${results}`)
+            res.json({ status: 'success', message: 'User registered correctly' })
         });
     })
 }
@@ -45,13 +45,13 @@ function login(req, res) {
     const sql = 'SELECT * FROM users WHERE users.username = ?';
     const values = username;
     connection.query(sql, [values], (err, results) => {
-        if (err) return res.status(500).json({ status: 'DB Error', message: err.message });
-        if (results.length == 0) return res.status(403).json({ status: 'Forbidden', message: 'User not found' });
+        if (err) return res.status(500).json({ status: 'error', message: err.message });
+        if (results.length == 0) return res.status(403).json({ status: 'forbidden', message: 'User not found' });
         const user = results[0]
         //se esiste decripto e confronto
         bcrypt.compare(password, user.password, (err, isMatch) => {
-            if (err) return res.status(500).json({ status: 'DB Error', message: err.message });
-            if (!isMatch) return res.status(401).json({ status: 'Forbidden', message: 'Incorrect password' });
+            if (err) return res.status(500).json({ status: 'error', message: err.message });
+            if (!isMatch) return res.status(401).json({ status: 'forbidden', message: 'Incorrect password' });
 
             //se il confornto ha successo genero il token e lo restituisco con la res
             const token = jwt.sign(
