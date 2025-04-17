@@ -31,8 +31,8 @@ function store(req, res) {
         const values = [newUser.username, hashedPass]
 
         connection.query(sql, values, (err, results) => {
-            if (err) return res.status(500).json({ status: 'DB error', message: err.message });
-            res.json({ status: 'success', message: 'User registered correctly' })
+            if (err) return res.status(500).json({ state: 'error', message: 'User already registered' });
+            res.json({ state: 'success', message: 'User registered correctly' })
         });
     })
 }
@@ -46,12 +46,12 @@ function login(req, res) {
     const values = username;
     connection.query(sql, [values], (err, results) => {
         if (err) return res.status(500).json({ status: 'error', message: err.message });
-        if (results.length == 0) return res.status(403).json({ status: 'forbidden', message: 'User not found' });
+        if (results.length == 0) return res.status(403).json({ state: 'forbidden', message: 'User not found' });
         const user = results[0]
         //se esiste decripto e confronto
         bcrypt.compare(password, user.password, (err, isMatch) => {
-            if (err) return res.status(500).json({ status: 'error', message: err.message });
-            if (!isMatch) return res.status(401).json({ status: 'forbidden', message: 'Incorrect password' });
+            if (err) return res.status(500).json({ state: 'error', message: err.message });
+            if (!isMatch) return res.status(401).json({ state: 'forbidden', message: 'Incorrect password' });
 
             //se il confornto ha successo genero il token e lo restituisco con la res
             const token = jwt.sign(
@@ -60,7 +60,7 @@ function login(req, res) {
                 { expiresIn: '1h' }
             )
 
-            res.json({ status: 'success', message: 'Login successfull', token })
+            res.json({ state: 'success', message: 'Login successfull', token })
         })
 
     })
