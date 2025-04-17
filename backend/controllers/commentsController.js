@@ -27,7 +27,7 @@ function show(req, res) {
 
 function store(req, res) {
     const newComment = req.body
-    //console.log(newComment);
+    console.log(newComment);
     newComment.name = req.user.username
 
     //console.log(newComment);
