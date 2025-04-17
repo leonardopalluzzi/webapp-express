@@ -21,6 +21,9 @@ function show(req, res) {
 function store(req, res) {
     const newUser = req.body;
 
+    if (!newUser.username) return res.status(403).json({ state: 'Forbidden', message: 'Username not valid' });
+    if (!newUser.password) return res.status(403).json({ state: 'Forbidden', message: 'Password not valid' })
+
     bcrypt.hash(newUser.password, 10, (err, hashedPass) => {
         if (err) return res.status(500).json({ status: 'DB error', message: err.message });
 
