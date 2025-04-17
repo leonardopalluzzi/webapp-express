@@ -27,12 +27,13 @@ function show(req, res) {
 
 function store(req, res) {
     const newComment = req.body
-    console.log(newComment);
     newComment.name = req.user.username
+
 
     //console.log(newComment);
 
     const sql = 'INSERT INTO reviews (movie_id, name, vote, text) VALUES (?, ?, ?, ?);'
+    console.log(newComment);
     const values = [newComment.movieId, newComment.name, newComment.vote, newComment.text]
 
     if (!newComment) res.status(400).json({ message: 'Empty comment' });
