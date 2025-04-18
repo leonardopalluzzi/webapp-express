@@ -1,17 +1,18 @@
 const express = require('express')
 const router = express.Router()
 const movieController = require('../controllers/movieController')
+const adminCheck = require('../middlewares/adminCheck')
 
 router.get('/', movieController.index)
 
 router.get('/:id', movieController.show)
 
-router.post('/', movieController.store)
+router.post('/', adminCheck, movieController.store)
 
-router.put('/', movieController.update)
+router.put('/', adminCheck, movieController.update)
 
-router.patch('/', movieController.modify)
+router.patch('/', adminCheck, movieController.modify)
 
-router.delete('/', movieController.destroy)
+router.delete('/', adminCheck, movieController.destroy)
 
 module.exports = router
