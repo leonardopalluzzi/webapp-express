@@ -27,8 +27,8 @@ function store(req, res) {
     bcrypt.hash(newUser.password, 10, (err, hashedPass) => {
         if (err) return res.status(500).json({ status: 'error', message: err.message });
 
-        const sql = 'INSERT INTO users (username, password) VALUES (?, ?)'
-        const values = [newUser.username, hashedPass]
+        const sql = 'INSERT INTO users (username, password, is_admin) VALUES (?, ?, ?)'
+        const values = [newUser.username, hashedPass, newUser.isAdmin]
 
         connection.query(sql, values, (err, results) => {
             if (err) return res.status(500).json({ state: 'error', message: 'User already registered' });
@@ -48,6 +48,7 @@ function login(req, res) {
         if (err) return res.status(500).json({ status: 'error', message: err.message });
         if (results.length == 0) return res.status(403).json({ state: 'forbidden', message: 'User not found' });
         const user = results[0]
+
         //se esiste decripto e confronto
         bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err) return res.status(500).json({ state: 'error', message: err.message });
@@ -60,7 +61,7 @@ function login(req, res) {
                 { expiresIn: '1h' }
             )
 
-            res.json({ state: 'success', message: 'Login successfull', token })
+            res.json({ state: 'success', message: 'Login successfull', token, role: user.is_admin })
         })
 
     })
