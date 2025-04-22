@@ -11,7 +11,7 @@ router.post('/', adminCheck, movieController.store)
 
 router.put('/', adminCheck, movieController.update)
 
-router.patch('/', adminCheck, movieController.modify)
+router.patch('/:id', adminCheck, movieController.modify)
 
 router.delete('/', adminCheck, movieController.destroy)
 

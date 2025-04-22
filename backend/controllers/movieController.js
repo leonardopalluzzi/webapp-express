@@ -52,7 +52,30 @@ function update(req, res) {
 }
 
 function modify(req, res) {
+    function getCurrentTimestamp() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Mesi da 0 a 11
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
 
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    const currentTimestamp = getCurrentTimestamp()
+    const changes = req.body
+
+    const sql = 'UPDATE movies SET title = ?, director = ?, genre = ?, abstract = ?, image = ?, updated_at = ?  WHERE id = ?'
+    const values = [req.body.title, req.body.director, req.body.genre, req.body.content, req.body.image, currentTimestamp, req.body.id]
+
+    connection.query(sql, values, (err, results) => {
+        if (err) return res.status(500).json({ state: 'error', message: err.message });
+        console.log(results);
+
+        return res.json({ state: 'success', message: 'movie updated correctly' })
+    })
 }
 
 function destroy(req, res) {
