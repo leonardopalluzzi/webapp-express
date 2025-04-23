@@ -48,8 +48,8 @@ function store(req, res) {
     const newMovie = req.body
     const cover_image = req.file.filename
 
-    const sql = 'INSERT INTO movies (title, abstract, director, genre, image) VALUES (?, ?, ?, ?, ?)'
-    const values = [newMovie.title, newMovie.abstract, newMovie.director, newMovie.genre, cover_image,]
+    const sql = 'INSERT INTO movies (title, abstract, director, genre, image, release_year) VALUES (?, ?, ?, ?, ?, ?)'
+    const values = [newMovie.title, newMovie.abstract, newMovie.director, newMovie.genre, cover_image, newMovie.release_year]
 
     connection.query(sql, values, (err, results) => {
         console.log(err);

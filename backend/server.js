@@ -7,6 +7,7 @@ const serverError = require('./middlewares/serverError');
 const notFound = require('./middlewares/notFound')
 const commentsRouter = require('./routers/commentsRouter')
 const userRouter = require('./routers/userRouter')
+const threadRouter = require('./routers/threadsRouter')
 
 app.use(cors({
     origin: 'http://localhost:5173'
@@ -19,6 +20,7 @@ app.use(express.static('./public'))
 app.use('/api/v1/movies/users', userRouter)
 app.use('/api/v1/movies', movieRouter)
 app.use('/api/v1/movies/comments', commentsRouter)
+app.use('/api/v1/movies/threads', threadRouter)
 
 app.use(serverError)
 

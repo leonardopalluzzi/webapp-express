@@ -16,7 +16,7 @@ function show(req, res) {
 
     const id = Number(req.params.id)
 
-    const sql = 'SELECT * FROM reviews WHERE movies.id = ?'
+    const sql = 'SELECT * FROM reviews WHERE movies_id = ?'
 
     connection.query(sql, [id], (err, results) => {
         if (err) return res.status(500).json({ status: 'DB error', message: err.message });
