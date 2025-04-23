@@ -4,10 +4,11 @@ const jwt = require('jsonwebtoken');
 
 function index(req, res) {
 
-    const sql = 'SELECT * FROM threads'
+    const sql = 'SELECT threads.*, movies.image FROM threads JOIN movies ON threads.movie_id = movies.id'
 
     connection.query(sql, (err, results) => {
-        if (err) return res.status(500).json({ status: 'DB error', message: err.message });
+
+        if (err) return res.status(500).json(err.message);
         res.json(results)
     })
 }
@@ -49,7 +50,7 @@ function store(req, res) {
     if (!newThread) res.status(400).json({ message: 'Empty thread' });
 
     connection.query(sql, values, (err, results) => {
-        if (err) return res.status(500).json({ status: 'DB error', message: err.message });
+        if (err) return res.status(500).json(err.message);
 
 
         res.json({ state: 'success', message: 'Thread posted successfully' })

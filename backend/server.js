@@ -20,7 +20,7 @@ app.use(express.static('./public'))
 app.use('/api/v1/movies/users', userRouter)
 app.use('/api/v1/movies', movieRouter)
 app.use('/api/v1/movies/comments', commentsRouter)
-app.use('/api/v1/movies/threads', threadRouter)
+app.use('/api/v1/threads', threadRouter)
 
 app.use(serverError)
 
