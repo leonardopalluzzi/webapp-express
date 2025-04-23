@@ -16,13 +16,26 @@ function index(req, res) {
 function show(req, res) {
 
     const id = Number(req.params.id)
+    console.log(id);
 
-    const sql = 'SELECT * FROM threads WHERE movies_id = ?'
+
+    const sql = "SELECT threads.id AS thread_id, threads.title AS thread_title, threads.username AS thread_author, threads.creation_date AS thread_creation_date, movies.title AS movie_title, movies.director AS movie_director, movies.genre AS movie_genre, movies.release_year AS movie_release_year, movies.abstract AS movie_description, movies.image AS movie_image FROM threads JOIN movies ON threads.movie_id = movies.id WHERE threads.id = 1;"
+
+    const messagesSql = 'SELECT * FROM messages WHERE thread_id = ?'
 
     connection.query(sql, [id], (err, results) => {
         if (err) return res.status(500).json({ status: 'DB error', message: err.message });
         if (results.length == 0) return res.status(404).json({ status: 'Not Found', message: 'Movie Not Found' });
-        res.json(results)
+        const threadMovieDetails = results[0]
+
+        connection.query(messagesSql, [threadMovieDetails.thread_id], (err, messagesRes) => {
+            if (err) return res.status(500), json(err.message);
+            const thread = {
+                ...threadMovieDetails,
+                messages: messagesRes
+            }
+            res.json(thread)
+        })
     })
 }
 
@@ -42,10 +55,10 @@ function store(req, res) {
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 
-    const creatioDate = getCurrentTimestamp();
+    const creationDate = getCurrentTimestamp();
 
     const sql = 'INSERT INTO threads (movie_id, title, username, creation_date) VALUES (?, ?, ?, ?)'
-    const values = [newThread.movieId, newThread.title, newThread.name, creatioDate]
+    const values = [newThread.movieId, newThread.title, newThread.name, creationDate]
 
     if (!newThread) res.status(400).json({ message: 'Empty thread' });
 
