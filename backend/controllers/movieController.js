@@ -80,6 +80,20 @@ function modify(req, res) {
 
 function destroy(req, res) {
 
+    const sql = 'DELETE FROM movies WHERE id = ?'
+    const id = Number(req.params.id)
+    console.log(id);
+
+
+
+    connection.query(sql, [id], (err, results) => {
+        console.log(results);
+
+        if (err) return res.status(500).json({ state: 'error', message: err.message });
+        //if (results.affectedRows == 0) return res.status(404).json({ state: 'error', message: 'Movie not found' });
+
+        return res.sendStatus(204)
+    })
 }
 
 module.exports = {

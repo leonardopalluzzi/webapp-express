@@ -56,7 +56,7 @@ function login(req, res) {
 
             //se il confornto ha successo genero il token e lo restituisco con la res
             const token = jwt.sign(
-                { id: user.id, username: user.username },
+                { id: user.id, username: user.username, isAdmin: user.is_admin },
                 secret,
                 { expiresIn: '1h' }
             )
