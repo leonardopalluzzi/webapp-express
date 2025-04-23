@@ -68,13 +68,13 @@ function update(req, res) {
 }
 
 function modify(req, res) {
+    let image;
 
-    // if (!req.file) {
-    //     return res.status(400).json({ state: 'error', message: 'No file uploaded' });
-    // }
-    const image = req.file.filename
-    console.log(image);
-
+    if (req.file) {
+        image = req.file.filename
+    } else {
+        image = req.body.image
+    }
 
     function getCurrentTimestamp() {
         const now = new Date();
@@ -90,15 +90,11 @@ function modify(req, res) {
 
     const currentTimestamp = getCurrentTimestamp()
 
-    const sql = 'UPDATE movies SET title = ?, director = ?, genre = ?, abstract = ?, image = ?, updated_at = ?  WHERE id = ?'
+    const sql = 'UPDATE movies SET title = ?, director = ?, genre = ?, abstract = ?, image = ?, updated_at = ? WHERE id = ?'
     const values = [req.body.title, req.body.director, req.body.genre, req.body.content, image, currentTimestamp, req.params.id]
 
     connection.query(sql, values, (err, results) => {
-        console.log(err);
-
-
         if (err) return res.status(500).json({ state: 'error', message: err.message });
-        console.log(results);
 
         return res.json({ state: 'success', message: 'movie updated correctly' })
     })

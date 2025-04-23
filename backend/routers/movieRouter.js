@@ -3,18 +3,7 @@ const router = express.Router()
 const movieController = require('../controllers/movieController')
 const adminCheck = require('../middlewares/adminCheck')
 const authorization = require('../middlewares/authorization')
-
-
-const multer = require('multer')
-
-const storage = multer.diskStorage({
-    destination: 'public/',
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname)
-    }
-})
-
-const upload = multer({ storage: storage })
+const upload = require('../middlewares/upload')
 
 
 
