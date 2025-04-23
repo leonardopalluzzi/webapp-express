@@ -19,7 +19,7 @@ function show(req, res) {
     console.log(id);
 
 
-    const sql = "SELECT threads.id AS thread_id, threads.title AS thread_title, threads.username AS thread_author, threads.creation_date AS thread_creation_date, movies.title AS movie_title, movies.director AS movie_director, movies.genre AS movie_genre, movies.release_year AS movie_release_year, movies.abstract AS movie_description, movies.image AS movie_image FROM threads JOIN movies ON threads.movie_id = movies.id WHERE threads.id = 1;"
+    const sql = "SELECT threads.id AS thread_id, threads.title AS thread_title, threads.username AS thread_author, threads.creation_date AS thread_creation_date, movies.title AS movie_title, movies.director AS movie_director, movies.genre AS movie_genre, movies.release_year AS movie_release_year, movies.abstract AS movie_description, movies.image AS movie_image FROM threads JOIN movies ON threads.movie_id = movies.id WHERE threads.id = ?;"
 
     const messagesSql = 'SELECT * FROM messages WHERE thread_id = ?'
 
