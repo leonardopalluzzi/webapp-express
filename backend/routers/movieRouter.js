@@ -26,7 +26,7 @@ router.post('/', adminCheck, upload.single('cover_image'), movieController.store
 
 router.put('/', adminCheck, movieController.update)
 
-router.patch('/:id', authorization, adminCheck, movieController.modify)
+router.patch('/:id', authorization, adminCheck, upload.single('image'), movieController.modify)
 
 router.delete('/:id', authorization, adminCheck, movieController.destroy)
 
