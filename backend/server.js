@@ -8,6 +8,7 @@ const notFound = require('./middlewares/notFound')
 const commentsRouter = require('./routers/commentsRouter')
 const userRouter = require('./routers/userRouter')
 const threadRouter = require('./routers/threadsRouter')
+const messagesRouter = require('./routers/messagesRouter')
 
 app.use(cors({
     origin: 'http://localhost:5173'
@@ -21,6 +22,7 @@ app.use('/api/v1/movies/users', userRouter)
 app.use('/api/v1/movies', movieRouter)
 app.use('/api/v1/movies/comments', commentsRouter)
 app.use('/api/v1/threads', threadRouter)
+app.use('/api/v1/messages', messagesRouter)
 
 app.use(serverError)
 
