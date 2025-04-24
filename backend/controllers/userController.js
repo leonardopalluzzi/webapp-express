@@ -61,7 +61,7 @@ function login(req, res) {
                 { expiresIn: '1h' }
             )
 
-            res.json({ state: 'success', message: 'Login successfull', username: user.username, password: user.password, token, role: user.is_admin })
+            res.json({ state: 'success', message: 'Login successfull', id: user.id, username: user.username, password: user.password, token, role: user.is_admin })
         })
 
     })
