@@ -5,7 +5,7 @@ const secret = process.env.SECRET_KEY
 
 function index(req, res) {
 
-    const sql = 'SELECT * FROM movies'
+    const sql = 'SELECT * FROM users'
 
     connection.query(sql, (err, results) => {
         if (err) return res.status(500).json({ status: 'DB error', message: err.message });
