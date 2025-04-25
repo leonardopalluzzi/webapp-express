@@ -50,6 +50,7 @@ function show(req, res) {
 
 function store(req, res) {
     const newUser = req.body;
+    const avatar = req.file.filename
 
     function getCurrentTimestamp() {
         const now = new Date();
@@ -72,7 +73,7 @@ function store(req, res) {
         if (err) return res.status(500).json({ status: 'error', message: err.message });
 
         const sql = 'INSERT INTO users (username, email, born_in, creation_date, last_login, phone, avatar, password, is_admin) VALUES (?, ?, ?)'
-        const values = [newUser.username, newUser.email, newUser.born_in, creationDate, newUser.last_login, newUser.phone, newUser.avatar, hashedPass, newUser.isAdmin]
+        const values = [newUser.username, newUser.email, newUser.born_in, creationDate, newUser.last_login, newUser.phone, avatar, hashedPass, newUser.isAdmin]
 
         connection.query(sql, values, (err, results) => {
             if (err) return res.status(500).json({ state: 'error', message: 'User already registered' });
