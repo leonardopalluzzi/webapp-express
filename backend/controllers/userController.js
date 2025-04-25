@@ -51,14 +51,28 @@ function show(req, res) {
 function store(req, res) {
     const newUser = req.body;
 
+    function getCurrentTimestamp() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // I mesi vanno da 0 a 11
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    const creationDate = getCurrentTimestamp()
+
     if (!newUser.username) return res.status(403).json({ state: 'forbidden', message: 'Username not valid' });
     if (!newUser.password) return res.status(403).json({ state: 'forbidden', message: 'Password not valid' })
 
     bcrypt.hash(newUser.password, 10, (err, hashedPass) => {
         if (err) return res.status(500).json({ status: 'error', message: err.message });
 
-        const sql = 'INSERT INTO users (username, password, is_admin) VALUES (?, ?, ?)'
-        const values = [newUser.username, hashedPass, newUser.isAdmin]
+        const sql = 'INSERT INTO users (username, email, born_in, creation_date, last_login, phone, avatar, password, is_admin) VALUES (?, ?, ?)'
+        const values = [newUser.username, newUser.email, newUser.born_in, creationDate, newUser.last_login, newUser.phone, newUser.avatar, hashedPass, newUser.isAdmin]
 
         connection.query(sql, values, (err, results) => {
             if (err) return res.status(500).json({ state: 'error', message: 'User already registered' });
