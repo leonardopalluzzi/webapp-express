@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const userController = require('../controllers/userController')
+const authorization = require('../middlewares/authorization')
 
 router.get('/', userController.index)
 
-router.get('/:id', userController.show)
+router.get('/:id', authorization, userController.show)
 
 router.post('/register', userController.store)
 

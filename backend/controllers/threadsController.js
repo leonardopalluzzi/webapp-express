@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 function index(req, res) {
 
-    const sql = 'SELECT threads.*, movies.image FROM threads JOIN movies ON threads.movie_id = movies.id'
+    const sql = 'SELECT threads.*, movies.image, movies.title AS "movie_title" FROM threads JOIN movies ON threads.movie_id = movies.id'
 
     connection.query(sql, (err, results) => {
 

@@ -15,6 +15,36 @@ function index(req, res) {
 
 function show(req, res) {
 
+    const id = req.params.id
+    const user = req.user.username
+
+    const userSql = 'SELECT * FROM users WHERE users.id = ?'
+    const userThreadsSql = 'SELECT threads.*, movies.image FROM threads JOIN movies ON threads.movie_id = movies.id WHERE threads.username = ?'
+    const userMessagesSql = 'SELECT * FROM messages WHERE messages.username = ?'
+
+    connection.query(userSql, [id], (err, results) => {
+        if (err) return res.status(500).json({ status: 'error', message: err.message });
+        if (results.legnth == 0) res.status(404).json({ state: 'error', message: 'user not found' });
+        const reqUser = results[0]
+
+        connection.query(userThreadsSql, [user], (err, threads) => {
+            if (err) return res.status(500).json({ status: 'error', message: err.message });
+            const userThreads = threads
+            connection.query(userMessagesSql, [user], (err, messages) => {
+                if (err) return res.status(500).json({ status: 'error', message: err.message });
+                const userMessages = messages
+
+                const userInfo = {
+                    ...reqUser,
+                    user_threads: [...threads],
+                    user_messages: [...userMessages]
+                }
+
+                res.json(userInfo)
+            })
+        })
+    })
+
 
 }
 
