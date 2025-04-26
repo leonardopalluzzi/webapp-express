@@ -81,13 +81,13 @@ function store(req, res) {
     bcrypt.hash(newUser.password, 10, (err, hashedPass) => {
         if (err) return res.status(500).json({ status: 'error', message: err.message });
 
-        const sql = 'INSERT INTO users (username, email, born_in, creation_date, last_login, phone, avatar, password, is_admin) VALUES (?, ?, ?)'
+        const sql = 'INSERT INTO users (username, email, born_in, creation_date, last_login, phone, avatar, password, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
         const values = [newUser.username, newUser.email, newUser.born_in, creationDate, lastLogin, newUser.phone, avatar, hashedPass, isAdmin]
         console.log(values);
 
 
         connection.query(sql, values, (err, results) => {
-            if (err) return res.status(500).json({ state: 'error', message: 'User already registered' });
+            if (err) return res.status(500).json({ state: 'error', message: err.message });
             res.json({ state: 'success', message: 'User registered correctly' })
         });
     })
