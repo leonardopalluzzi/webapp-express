@@ -49,8 +49,15 @@ function show(req, res) {
 }
 
 function store(req, res) {
+    console.log(req.file);
+
     const newUser = req.body;
     const avatar = req.file.filename
+
+    console.log(newUser);
+    console.log(newUser.username);
+
+
 
     function getCurrentTimestamp() {
         const now = new Date();
@@ -65,15 +72,19 @@ function store(req, res) {
     }
 
     const creationDate = getCurrentTimestamp()
+    const lastLogin = creationDate
+    const isAdmin = 0
 
     if (!newUser.username) return res.status(403).json({ state: 'forbidden', message: 'Username not valid' });
-    if (!newUser.password) return res.status(403).json({ state: 'forbidden', message: 'Password not valid' })
+    if (!newUser.password) return res.status(403).json({ state: 'forbidden', message: 'Password not valid' });
 
     bcrypt.hash(newUser.password, 10, (err, hashedPass) => {
         if (err) return res.status(500).json({ status: 'error', message: err.message });
 
         const sql = 'INSERT INTO users (username, email, born_in, creation_date, last_login, phone, avatar, password, is_admin) VALUES (?, ?, ?)'
-        const values = [newUser.username, newUser.email, newUser.born_in, creationDate, newUser.last_login, newUser.phone, avatar, hashedPass, newUser.isAdmin]
+        const values = [newUser.username, newUser.email, newUser.born_in, creationDate, lastLogin, newUser.phone, avatar, hashedPass, isAdmin]
+        console.log(values);
+
 
         connection.query(sql, values, (err, results) => {
             if (err) return res.status(500).json({ state: 'error', message: 'User already registered' });
@@ -85,13 +96,17 @@ function store(req, res) {
 function login(req, res) {
     //recupero user e pass
     const { username, password } = req.body;
+    console.log(req.body);
+
 
     //verifico l'esistenza dello user
     const sql = 'SELECT * FROM users WHERE users.username = ?';
     const values = username;
     connection.query(sql, [values], (err, results) => {
+        console.log(results.length);
+
         if (err) return res.status(500).json({ status: 'error', message: err.message });
-        if (results.length == 0) return res.status(403).json({ state: 'forbidden', message: 'User not found' });
+        if (results.length === 0) return res.status(403).json({ state: 'forbidden', message: 'User not found' });
         const user = results[0]
 
         //se esiste decripto e confronto

@@ -8,9 +8,9 @@ router.get('/', userController.index)
 
 router.get('/:id', authorization, userController.show)
 
-router.post('/register', userController.store)
+router.post('/register', upload.single('avatar'), userController.store)
 
-router.post('/login', upload.single('avatar'), userController.login)
+router.post('/login', userController.login)
 
 router.put('/:id', userController.update)
 

@@ -18,7 +18,7 @@ app.use(express.json({ limit: '10mb' }))
 
 app.use(express.static('./public'))
 
-app.use('/api/v1/movies/users', userRouter)
+app.use('/api/v1/users', userRouter)
 app.use('/api/v1/movies', movieRouter)
 app.use('/api/v1/movies/comments', commentsRouter)
 app.use('/api/v1/threads', threadRouter)
