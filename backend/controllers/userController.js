@@ -98,15 +98,20 @@ function login(req, res) {
     const { username, password } = req.body;
     console.log(req.body);
 
+    if (!username || !password) {
+        return res.status(400).json({ state: 'error', message: 'Username and password are required' });
+    }
 
     //verifico l'esistenza dello user
     const sql = 'SELECT * FROM users WHERE users.username = ?';
-    const values = username;
-    connection.query(sql, [values], (err, results) => {
+
+    connection.query(sql, [username], (err, results) => {
         console.log(results.length);
 
         if (err) return res.status(500).json({ status: 'error', message: err.message });
-        if (results.length === 0) return res.status(403).json({ state: 'forbidden', message: 'User not found' });
+        if (!results || results.length === 0) {
+            return res.status(403).json({ state: 'forbidden', message: 'User not found' });
+        }
         const user = results[0]
 
         //se esiste decripto e confronto
@@ -121,7 +126,7 @@ function login(req, res) {
                 { expiresIn: '1h' }
             )
 
-            res.json({ state: 'success', message: 'Login successfull', id: user.id, username: user.username, password: user.password, token, role: user.is_admin })
+            res.json({ state: 'success', message: 'Login successfull', id: user.id, username: user.username, token, role: user.is_admin })
         })
 
     })
