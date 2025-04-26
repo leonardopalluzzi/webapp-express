@@ -108,16 +108,16 @@ function login(req, res) {
     connection.query(sql, [username], (err, results) => {
         console.log(results.length);
 
-        if (err) return res.status(500).json({ status: 'error', message: err.message });
+        if (err) return res.status(500).json({ state: 'error', message: err.message });
         if (!results || results.length === 0) {
-            return res.status(403).json({ state: 'forbidden', message: 'User not found' });
+            return res.status(404).json({ state: 'forbidden', message: 'User not found' });
         }
         const user = results[0]
 
         //se esiste decripto e confronto
         bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err) return res.status(500).json({ state: 'error', message: err.message });
-            if (!isMatch) return res.status(401).json({ state: 'forbidden', message: 'Incorrect password' });
+            if (!isMatch) return res.status(401).json({ state: 'error', message: 'Incorrect password' });
 
             //se il confornto ha successo genero il token e lo restituisco con la res
             const token = jwt.sign(
